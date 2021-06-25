@@ -77,6 +77,14 @@ client.connect(err => {
        res.send(orders)
     })
   })
+
+  app.get('/singleOrder/:id',(req, res)=>{
+    orderCollection.find({_id:ObjectId(req.params.id)})
+    .toArray((err,documents)=>{
+      res.send(documents[0])
+    })
+  })
+
   app.get('/orders',(req,res) => {
     orderCollection.find()
     .toArray((err,allOrders) => {
@@ -94,6 +102,20 @@ client.connect(err => {
       res.send(result.insertedCount > 0)
     })
   }) 
+
+  app.patch('/updateOrder/:id',(req,res)=>{
+    console.log(req.params.id)
+     
+    orderCollection.updateOne({_id:ObjectId(req.params.id)},
+     {
+         $set:{ status:req.body.status}
+     })
+     .then(result=>{
+         res.send(result.modifiedCount > 0)
+        
+       
+     })
+ })
 });
 
 client.connect(err => {
@@ -152,6 +174,8 @@ app.listen(port)
 
 
 // https://github.com/Porgramming-Hero-web-course/complete-website-server-zabedbinsiraz
+
+// https://infinite-hamlet-09689.herokuapp.com/
 
 
 
